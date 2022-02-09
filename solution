@@ -1,0 +1,55 @@
+#include <bits/stdc++.h>
+
+const int mod = 1e2; // I guess it's optimal size of array to show solution
+
+using namespace std;
+
+mt19937 rnd(time(0));
+
+int generate_size()
+{
+	int sz = rnd();
+	sz = abs(sz);
+	sz %= mod; // v may be about 1e9, it's nearly impossible to generate it
+	++sz; // zero isn't good size of array, isn't it?
+	return sz;
+}
+
+vector <vector <int> > generate_arrays(int n)
+{
+	set <int> was; // we can't repeat sizes
+	vector <vector <int> > ans(n);
+	
+	for (int step = 0; step < n; ++step) {
+		int sz = generate_size();
+		while (was.count(sz)) sz = generate_size(); // to avoid repeats
+		vector <int> a(sz);
+		ans[step].resize(sz);
+		for (int i = 0; i < sz; ++i) a[i] = rnd();
+		
+		sort(a.begin(), a.end());
+		if (!(step & 1)) reverse(a.begin(), a.end()); // if odd but we started from zero
+		
+		ans[step] = a;
+	}
+	
+	return ans;
+}
+
+
+int main() {
+	
+	int n;
+	cin >> n;
+	
+	vector <vector <int> > ans;
+	ans = generate_arrays(n);
+	cout << ans.size();
+	
+	for (int i = 0; i < n; ++i) {
+		for (auto &element: ans[i]) cout << element << ' ';
+		cout << "\n";
+	}
+	
+	return 0;
+}
